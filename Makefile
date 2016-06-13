@@ -1,3 +1,10 @@
+L = 3
+N = 10
+J0 = 20
+dist_type = n
+
+
+
 
 all:
 	
@@ -6,4 +13,7 @@ build:
 	g++ -c mkrgBuild.cpp
 	gcc -c mkrgLibrary.c
 	g++ -o mkrgBuild mkrgBuild.o mkrgLibrary.o
-	./mkrgBuild 10 10 20 n
+	./mkrgBuild $(L) $(N) $(J0) $(dist_type)
+
+plot:
+	python mkrgPlot.py $(L) $(N) $(J0) $(dist_type)

@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 
     // Setup file writing
     char file_name[80];
-    sprintf(file_name, "mkrg_L=%i_N=%i_J0=%.0lf_distType=%c.txt", L, N, J0, dist_type);
+    sprintf(file_name, "data/mkrg_L=%i_N=%i_J0=%.0lf_distType=%c.txt", L, N, J0, dist_type);
     printf("%s\n", file_name);
     FILE *file = fopen(file_name, "w");
     fprintf(file, "%i\t%i\t%.0lf\t%c\n", L, N, J0, dist_type);
@@ -57,7 +57,10 @@ int main(int argc, char* argv[]){
 
     for(l=0; l<L; l++){
         for(n=0; n<N; n++){
-            fprintf(file, "%f\t", J[l*N + n]);
+            fprintf(file, "%f", J[l*N + n]);
+            if(n<N-1){
+                fprintf(file, "\t");
+            }
         }
         fprintf(file, "\n");
     }
