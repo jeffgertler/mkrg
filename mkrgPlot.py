@@ -10,7 +10,6 @@ N = int(sys.argv[2])
 J0 = float(sys.argv[3])
 dist_type = sys.argv[4]
 
-
 file_name = "mkrg_L=" + str(L) + "_N=" + str(N) + "_J0=" + str(int(J0)) + "_distType=" + dist_type
 text = np.loadtxt("data/" + file_name + ".txt", skiprows=1, delimiter='\t')
 
