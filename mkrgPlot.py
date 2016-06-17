@@ -15,6 +15,7 @@ file_name = "mkrg_L=" + str(L) + "_N=" + str(N) + "_J0=" + str(int(J0)) + "_dist
 text = np.loadtxt("data/" + file_name + ".txt", skiprows=1, delimiter='\t')
 
 for l in range(L):
-    pl.hist(text[l])
+    print(str(l) + "/" + str(L))
+    pl.hist(text[l], bins = (N/100))
     pl.savefig("out/" + file_name + "_" + str(l) + ".png")
     pl.clf()

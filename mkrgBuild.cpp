@@ -51,10 +51,15 @@ int main(int argc, char* argv[]){
             for(i=0; i<mkrg_num; i++){
                 J_temp[i] = J[l*N + uni(eng)];
             }
-            J[(l+1)*N + n] = rec3d(J_temp);
+            if(check0t(J_temp, J0)){
+                J[(l+1)*N + n] = rec3d0t(J_temp);
+            } else {
+                J[(l+1)*N + n] = rec3d(J_temp);
+            }
         }
     }
 
+    // Printing to file
     for(l=0; l<L; l++){
         for(n=0; n<N; n++){
             fprintf(file, "%f", J[l*N + n]);
@@ -65,12 +70,6 @@ int main(int argc, char* argv[]){
         fprintf(file, "\n");
     }
 
-    double *a = (double *) malloc(8 * sizeof(double));
-    for(i=0; i<8; i++){
-        a[i] = (double) 1;
-    }
-    //printf("%f\n", rec3d(a));
-    //printf("%f\n", rec3d0t(a));
     
     fclose(file);
     
