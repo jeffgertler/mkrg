@@ -22,3 +22,7 @@ int check0t(double *J, double cutoff){
         return 0;
     }
 }
+
+double series(double J1, double J2){
+    return .5 * log(cosh(J1+J2) / cosh(J1-J2));
+}
