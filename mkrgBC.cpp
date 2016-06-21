@@ -21,13 +21,13 @@ int main(int argc, char* argv[]){
     int mkrg_num = 8; // Number of bonds per mkrg iteration
 
     int sub_system_size = 1;
-    int super_system_size = 2;
+    int super_system_size = 8;
 
 
-    // Setup file writing
+    // Setup file reading
     char file_name[80];
     sprintf(file_name, "data/mkrg_L=%i_N=%i_J0=%.0lf_distType=%c.txt", L, N, J0, dist_type);
-    printf("%s\n", file_name);
+    printf("Reading from: %s\n", file_name);
     FILE *file = fopen(file_name, "r");
 
     // Initialize bond array
@@ -53,13 +53,22 @@ int main(int argc, char* argv[]){
         }
     }
   
+    // Setup file writing
+    sprintf(file_name, "data/mkrgBC_L=%i_N=%i_J0=%.0lf_distType=%c.txt", L, N, J0, dist_type);
+    printf("Writing to: %s\n", file_name);
+    file = fopen(file_name, "w");
+
     // Calcualte BC
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
     std::uniform_int_distribution<int> uni(0, N-1);
     double J_net[N];
     double J_temp = 0;
+    int progress_counter = 0;
     for(c=0; c<N; c++){
+        if(c%(N/10) == 0){
+            printf("%i%% complete\n", ++progress_counter*10);
+        }
         for(n=0; n<N; n++){
             J_net[c] = 0;
         }
@@ -70,12 +79,12 @@ int main(int argc, char* argv[]){
             for(i=0; i<4; i++){
                 J_temp += J[l*N + uni(eng)]; // 4 J_l
             }
-            J_net[c] = series(J_net[c], J_temp);
+            J_net[c] = series(J_net[c], J_temp, J0);
             for(i=0; i<3; i++){
                 J_net[c] += J[l*N + uni(eng)]; // J_net += 3J_l
             }
         }
-        printf("%f\n", J_net[c]);
+        fprintf(file, "%f\t", J_net[c]);
     }
 
     

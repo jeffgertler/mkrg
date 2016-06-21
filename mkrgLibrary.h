@@ -6,7 +6,7 @@ extern "C"{
     double rec3d(double *J);
     double rec3d0t(double *J);
     int check0t(double *J, double cutoff);
-    double series(double J1, double J2);
+    double series(double J1, double J2, double cutoff);
 
 #ifdef __cplusplus
 }

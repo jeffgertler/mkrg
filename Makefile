@@ -1,5 +1,5 @@
 L= 10
-N = 1000
+N = 100000
 J0 = 20
 dist_type = n
 
@@ -21,5 +21,5 @@ bc:
 	gcc -c mkrgLibrary.c
 	g++ -o mkrgBC mkrgBC.o mkrgLibrary.o
 	./mkrgBC $(L) $(N) $(J0) $(dist_type)
-
+	python mkrgBCPlot.py $(L) $(N) $(J0) $(dist_type)
 
