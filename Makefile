@@ -1,4 +1,4 @@
-L= 10
+L= 30
 N = 100000
 J0 = 20
 dist_type = n
@@ -20,6 +20,13 @@ bc:
 	g++ -c mkrgBC.cpp
 	gcc -c mkrgLibrary.c
 	g++ -o mkrgBC mkrgBC.o mkrgLibrary.o
-	./mkrgBC $(L) $(N) $(J0) $(dist_type)
+	./mkrgBC $(L) $(N) $(J0) $(dist_type) 1
 	python mkrgBCPlot.py $(L) $(N) $(J0) $(dist_type)
+
+bctrack:
+	g++ -c mkrgBCTrack.cpp
+	gcc -c mkrgLibrary.c
+	g++ -o mkrgBCTrack mkrgBCTrack.o mkrgLibrary.o
+	./mkrgBCTrack $(L) $(N) $(J0) $(dist_type)
+	python mkrgBCTrackPlot.py $(L) $(N) $(J0) $(dist_type)
 

@@ -10,17 +10,18 @@ dist_type = sys.argv[4]
 
 print("Reading file into python")
 file_name = "mkrgBC_L=" + str(L) + "_N=" + str(N) + "_J0=" + str(int(J0)) + "_distType=" + dist_type
-text = np.loadtxt("data/" + file_name + ".txt")
+J = np.loadtxt("data/" + file_name + ".txt")
 
-print(str((1.0 * len(text[text == float('inf')])/N)*100) + '% inf')
-print(str((1.0 * len(text[text == -float('inf')])/N)*100) + '% -inf')
-print(str((1.0 * len(text[np.isnan(text)])/N)*100) + '% nan')
-
-J_temp = text[text != float('inf')]
-J_temp = J_temp[J_temp != -float('inf')]
-J = J_temp[np.invert(np.isnan(J_temp))]
-
+print(np.mean(J), np.var(J))
 
 print("Plotting")
+a, bins = np.histogram(J, bins= np.linspace(-6, 6, 100))
+#pl.plot(bins[:-1], np.sqrt(-np.log(a/float(a[50]))))
+pl.plot(bins[:-1], a)
+pl.show()
+
+
+'''
 pl.hist(J, bins=N/1000)
 pl.show()
+'''
