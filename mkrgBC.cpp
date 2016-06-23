@@ -61,36 +61,29 @@ int main(int argc, char* argv[]){
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
     std::uniform_int_distribution<int> uni(0, N-1);
-    double J_net[N];
+    double J_net;
     double J_temp;
     int progress_counter = 0;
-    int count = 0;
     for(c=0; c<N; c++){
         if(c%(N/10) == 0){
             printf("%i%% complete\n", ++progress_counter*10);
         }
-        J_net[c] = 0;
+        J_net = 0;
         for(i=0; i<3; i++){
-            J_net[c] += J[super_system_size*N + uni(eng)]; // J_net += 3J_L
+            J_net += J[super_system_size*N + uni(eng)]; // J_net += 3J_L
         }
         for(l=super_system_size-1; l>=sub_system_size; l--){
-            count=0;
             J_temp = 0;
             for(i=0; i<4; i++){
                 J_temp += J[l*N + uni(eng)]; // 4 J_l
             }
-            //if(fabs(series(J_net[c], J_temp, J0)) > fabs(J_net[c])){
-            //    count++;
-            //}
-            printf("%f, %f, %f\n", J_net[c], J_temp, series(J_net[c], J_temp, J0));
-            J_net[c] = series(J_net[c], J_temp, J0);
+            J_net = series(J_net, J_temp, J0);
             for(i=0; i<3; i++){
-                J_net[c] += J[l*N + uni(eng)]; // J_net += 3J_l
+                J_net += J[l*N + uni(eng)]; // J_net += 3J_l
             }
         }
-        fprintf(file, "%f\t", J_net[c]);
+        fprintf(file, "%f\t", J_net);
     }
-    printf("%i/%i\n", count, N);
     
     fclose(file);
     

@@ -20,7 +20,7 @@ bc:
 	g++ -c mkrgBC.cpp
 	gcc -c mkrgLibrary.c
 	g++ -o mkrgBC mkrgBC.o mkrgLibrary.o
-	./mkrgBC $(L) $(N) $(J0) $(dist_type) 1
+	./mkrgBC $(L) $(N) $(J0) $(dist_type) 2 
 	python mkrgBCPlot.py $(L) $(N) $(J0) $(dist_type)
 
 bctrack:
