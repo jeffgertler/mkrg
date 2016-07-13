@@ -20,8 +20,9 @@ int main(int argc, char* argv[]){
     char dist_type = (char) argv[4][0];
     int mkrg_num = 8; // Number of bonds per mkrg iteration
 
-    int sub_system_size = 0;
-    int super_system_size = atoi(argv[5]);
+    int sub_system_size = 15;
+    int super_system_size = 15;
+    // int super_system_size = atoi(argv[5]);
 
     // Setup file reading
     char file_name[80];

@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
     //if(dist_type == 'n'){
-        std::normal_distribution<double> distribution(0., 1.);
+        std::normal_distribution<double> distribution(0., 1);
     //}
     for(n=0; n<N; n++){
         J[n] = distribution(eng);

@@ -15,6 +15,7 @@ text = np.loadtxt("data/" + file_name + ".txt", skiprows=1, delimiter='\t')
 
 for l in range(L):
     print(str(l) + "/" + str(L))
+    print(np.var(text[l]))
     pl.hist(text[l], bins = (N/100))
     pl.savefig("out/" + file_name + "_" + str(l) + ".png")
     pl.clf()
