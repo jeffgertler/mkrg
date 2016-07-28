@@ -4,7 +4,8 @@ import sys
 import math
 
 def correlation(J_track, n):
-    return (math.tanh(J_track[n]) - math.tanh(J_track[-1]))/(math.tanh(J_track[0]) - math.tanh(J_track[-1]))
+    #return (math.tanh(J_track[n]) - math.tanh(J_track[-1]))/(math.tanh(J_track[0]) - math.tanh(J_track[-1]))
+    return abs(math.tanh(J_track[n]) - math.tanh(J_track[-1]))
 
 
 
@@ -14,24 +15,64 @@ N = int(sys.argv[2])
 J0 = float(sys.argv[3])
 dist_type = sys.argv[4]
 
-print("Reading file into python")
-file_name = "mkrgBCTrack_L=" + str(L) + "_N=" + str(N) + "_J0=" + str(int(J0)) + "_distType=" + dist_type
+file_name = "mkrgBCTrack_L=" + str(L) + "_N=" + str(N) + "_J0=" + "{:.5f}".format(J0) + "_distType=" + dist_type
+print("Reading " + file_name + " into python")
 J = np.loadtxt("data/" + file_name + ".txt")
 
+
+J = J.reshape(L, N, L)
 print(J.shape)
 
-sub_system_size = 0
 
 
-corr = np.zeros((N, L-sub_system_size))
-for n in range(N):
-    for l in range(L-sub_system_size):
-        corr[n, l] = correlation(J[n], l)
+log_slope = np.zeros(L-5)
+initial = np.zeros_like(log_slope)
 
-print(np.mean(corr, axis=0))
-pl.plot(range(sub_system_size, L), np.mean(corr, axis=0), 'k')
+corr = np.zeros((N, L))
+for sub_system_size in range(L-5):
+    print("itteration " + str(sub_system_size))
+    for n in range(N):
+        for l in range(L):
+            corr[n, l] = correlation(J[sub_system_size, n], l)
+    corr_ave = np.mean(corr, axis=0)
+    log_corr = np.log(corr_ave)
+    log_slope[sub_system_size] = (log_corr[sub_system_size] - log_corr[sub_system_size+4]) / 4
+    initial[sub_system_size] = corr_ave[sub_system_size] 
+    pl.plot(range(sub_system_size, L), log_corr[sub_system_size:L]);
+pl.show()
+pl.clf()
+
+print(log_slope)
+print(np.mean(log_slope), np.std(log_slope))
+
+pl.plot(range(L-5), log_slope)
+pl.show()
+pl.clf()
+pl.plot(range(L-5), initial)
+pl.show()
+pl.clf()
+
+
+
+'''
+print("sub_system_variance: " + str(np.var(J[0])))
+print("inital value: " + str(values[0]))
+print("log slope: " + str((values[0]-values[5])/5))
+pl.plot(range(sub_system_size, L), np.log(np.mean(corr, axis=0)), 'k')
 #pl.plot(range(sub_system_size, L), np.std(corr, axis=0), 'b')
 pl.show()
+pl.clf()
+'''
+
+
+'''
+for n in range(100):
+    pl.plot(range(L), np.tanh(J[n]))
+pl.show()
+'''
+
+
+
 
 '''
 J_cross = np.zeros_like(J)

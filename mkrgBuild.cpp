@@ -18,10 +18,11 @@ int main(int argc, char* argv[]){
     double J0 = atof(argv[3]);
     char dist_type = (char) argv[4][0];
     int mkrg_num = 8; // Number of bonds per mkrg iteration
+    int MAX_VALUE = 20;
 
     // Setup file writing
     char file_name[80];
-    sprintf(file_name, "data/mkrg_L=%i_N=%i_J0=%.0lf_distType=%c.txt", L, N, J0, dist_type);
+    sprintf(file_name, "data/mkrg_L=%i_N=%i_J0=%.5lf_distType=%c.txt", L, N, J0, dist_type);
     printf("%s\n", file_name);
     FILE *file = fopen(file_name, "w");
     fprintf(file, "%i\t%i\t%.0lf\t%c\n", L, N, J0, dist_type);
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]){
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
     //if(dist_type == 'n'){
-        std::normal_distribution<double> distribution(0., 1);
+        std::normal_distribution<double> distribution(0., J0);
     //}
     for(n=0; n<N; n++){
         J[n] = distribution(eng);
@@ -51,7 +52,7 @@ int main(int argc, char* argv[]){
             for(i=0; i<mkrg_num; i++){
                 J_temp[i] = J[l*N + uni(eng)];
             }
-            if(check0t(J_temp, J0)){
+            if(check0t(J_temp, MAX_VALUE)){
                 J[(l+1)*N + n] = rec3d0t(J_temp);
             } else {
                 J[(l+1)*N + n] = rec3d(J_temp);
