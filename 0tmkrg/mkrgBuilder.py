@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as pl
 import math
 
-
+''' 0t neclace mkrg relation '''
 def recN0T(K):
     return .5 * (abs(K[0] + K[1] + K[2] + K[3] + K[4] + K[5] + K[6] + K[7])
                - abs(K[0] + K[1] + K[2] + K[3] - K[4] - K[5] - K[6] - K[7]))
 
+''' finite t neclace mkrg relation '''
 def recN(K, MAX_VALUE):
     if(abs(K[0] + K[1] + K[2] + K[3] + K[4] + K[5] + K[6] + K[7]) > MAX_VALUE
     	or abs(K[0] + K[1] + K[2] + K[3] - K[4] - K[5] - K[6] - K[7]) > MAX_VALUE):
@@ -15,23 +16,26 @@ def recN(K, MAX_VALUE):
     	return .5 * math.log(math.cosh(K[0] + K[1] + K[2] + K[3] + K[4] + K[5] + K[6] + K[7])
                			  / math.cosh(K[0] + K[1] + K[2] + K[3] - K[4] - K[5] - K[6] - K[7]))
 
+''' finite t series calculation '''
 def series(K1, K2, MAX_VALUE):
 	if(abs(K1 + K2) > MAX_VALUE or abs(K1 - K2) > MAX_VALUE):
 		return .5 * (abs(K1 + K2) - abs(K1 - K2))
 	else:
 		return .5 * math.log(math.cosh(K1 + K2) / math.cosh(K1 - K2))
 
+''' 0t diamond mkrg relation '''
 def recD0T(K):
     return .5 * (abs(K[0] + K[1]) - abs(K[0] - K[1])
     		   + abs(K[2] + K[3]) - abs(K[2] - K[3])
     		   + abs(K[4] + K[5]) - abs(K[4] - K[5])
     		   + abs(K[6] + K[7]) - abs(K[6] - K[7]))
 
+''' finite t diamond mkrg relation '''
 def recD(K, MAX_VALUE):
 	return (series(K[0], K[1], MAX_VALUE) + series(K[2], K[3], MAX_VALUE)
 		  + series(K[4], K[5], MAX_VALUE) + series(K[6], K[7], MAX_VALUE))
 
-
+''' Constansts TODO: shoud push these into makefile and read from there'''
 N = 100000
 N_burn = 100000
 L = 30
@@ -77,7 +81,7 @@ for n in range(N):
 ''' Resize K_final to var=1 '''
 K_final *= 1./np.sqrt(np.var(K_final))
 
-
+''' Save K_final to file ''' 
 np.savetxt("data/0tmkrg_N=" + str(N) + "_mkrg=" + str(mkrg_type) + ".txt", 
 			np.append(np.array([np.mean(lam)]), K_final))
 

@@ -2,17 +2,20 @@ import numpy as np
 import matplotlib.pyplot as pl
 import math
 
+
 def series(K1, K2):
 	return .5 * (abs(K1 + K2) - abs(K1 - K2))
 
 def correlation(K, K_inf):
 	return abs(math.tanh(K) - math.tanh(K_inf))
 
+''' Constants '''
 N = 100000
 L = 20
 num_traces = 10000
 mkrg_type = "D"
 
+''' Read in 0t distribution '''
 print("reading from data/0tmkrg_N=" + str(N) + "_mkrg=" + str(mkrg_type) + ".txt")
 K = np.loadtxt("data/0tmkrg_N=" + str(N) + "_mkrg=" + str(mkrg_type) + ".txt")
 lam = np.copy(K[0])
@@ -28,10 +31,12 @@ print("lam = " + str(lam))
 yint = np.zeros(20)
 exponent = np.zeros(20)
 
+''' itterate 20 times to generate std of yint and exponnent '''
 for i in range(20):
 	print(str(i) + "/" + str(20))
 	K_traces = np.zeros((num_traces, L, 7))
 
+    ''' Fill in array containing the disorder realization to calculate the bc with '''
 	for n in range(num_traces):
 		for l in range(L):
 			K_traces[n, l] = K[np.random.randint(0, N-1, 7)] * (lam ** (l))
@@ -40,6 +45,7 @@ for i in range(20):
 	corr = np.zeros_like(bc)
 
 	status = 0
+    ''' Neclace Code '''
 	if(mkrg_type == "N"):
 		for n in range(num_traces):
 			'''
@@ -54,6 +60,7 @@ for i in range(20):
 					bc[n, l] += np.sum(K_traces[n, ss, 4:7])
 			for l in range(L):
 				corr[n, l] = correlation(bc[n, l], bc[n, L-1])
+    ''' Diamond code '''
 	if(mkrg_type == "D"):
 		for n in range(num_traces):
 			'''
@@ -70,9 +77,8 @@ for i in range(20):
 			for l in range(L):
 				corr[n, l] = correlation(bc[n, l], bc[n, L-1])
 
-
+    ''' Calculate the yint and exponnent from correlation values '''
 	corr_mean = np.mean(corr, axis=0)
-
 	yint[i] = corr_mean[0]
 	exponent[i] = (np.log(corr_mean[5]) - np.log(corr_mean[0]))/5
 	#print(corr_mean[0], (np.log(corr_mean[5]) - np.log(corr_mean[0]))/5)
